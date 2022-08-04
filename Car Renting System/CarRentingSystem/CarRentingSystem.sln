@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32210.238
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarRentingSystem", "CarRentingSystem\CarRentingSystem.csproj", "{DF2D6055-1C2A-492A-897C-A95239870A9D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarRentingSystem", "CarRentingSystem\CarRentingSystem.csproj", "{DF2D6055-1C2A-492A-897C-A95239870A9D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{5549B28B-F7E4-4A3B-B47D-7BF5264C68C2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarRentingSystem.Data", "Data\CarRentingSystem.Data\CarRentingSystem.Data.csproj", "{8A158A59-F84C-4AC0-863E-E81DE38A45DF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,9 +19,16 @@ Global
 		{DF2D6055-1C2A-492A-897C-A95239870A9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DF2D6055-1C2A-492A-897C-A95239870A9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DF2D6055-1C2A-492A-897C-A95239870A9D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A158A59-F84C-4AC0-863E-E81DE38A45DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A158A59-F84C-4AC0-863E-E81DE38A45DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A158A59-F84C-4AC0-863E-E81DE38A45DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A158A59-F84C-4AC0-863E-E81DE38A45DF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{8A158A59-F84C-4AC0-863E-E81DE38A45DF} = {5549B28B-F7E4-4A3B-B47D-7BF5264C68C2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {01C17401-C57B-48F3-8E7C-CE85210F5708}
