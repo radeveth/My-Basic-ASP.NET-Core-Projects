@@ -16,3 +16,12 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.header-margin {
+    margin-top: 20px;
+    margin-bottom: 40px;
+}
+
+.form-margin {
+    margin-top: 15px;
+}

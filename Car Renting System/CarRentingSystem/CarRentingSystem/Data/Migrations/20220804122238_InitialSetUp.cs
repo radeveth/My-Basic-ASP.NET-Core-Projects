@@ -4,7 +4,7 @@
 
 namespace CarRentingSystem.Data.Migrations
 {
-    public partial class CarsAndCategoriesTablesAdded : Migration
+    public partial class InitialSetUp : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -14,17 +14,11 @@ namespace CarRentingSystem.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CategoryId = table.Column<int>(type: "int", nullable: true)
+                    Name = table.Column<string>(type: "nvarchar(25)", maxLength: 25, nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Categories", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Categories_Categories_CategoryId",
-                        column: x => x.CategoryId,
-                        principalTable: "Categories",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -48,17 +42,12 @@ namespace CarRentingSystem.Data.Migrations
                         column: x => x.CategoryId,
                         principalTable: "Categories",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Cars_CategoryId",
                 table: "Cars",
-                column: "CategoryId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Categories_CategoryId",
-                table: "Categories",
                 column: "CategoryId");
         }
 

@@ -8,11 +8,11 @@
     {
         [Key]
         public int Id { get; init; }
-        
+
         [Required]
         [MaxLength(DataConstants.CarBarndMaxLength)]
         public string Brand { get; set; }
-        
+
         [Required]
         [MaxLength(DataConstants.CarModelMaxLength)]
         public string Model { get; set; }
@@ -32,6 +32,5 @@
         [ForeignKey(nameof(Category))]
         public int CategoryId { get; set; }
         public virtual Category Category { get; set; }
-
     }
 }

@@ -4,22 +4,20 @@ using CarRentingSystem.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
 namespace CarRentingSystem.Data.Migrations
 {
-    [DbContext(typeof(CarRentingDbContext))]
-    [Migration("20220804115105_CarsAndCategoriesTablesAdded")]
-    partial class CarsAndCategoriesTablesAdded
+    [DbContext(typeof(CarRentingDbCotext))]
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.7")
+                .HasAnnotation("ProductVersion", "6.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -73,16 +71,12 @@ namespace CarRentingSystem.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int?>("CategoryId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(25)
+                        .HasColumnType("nvarchar(25)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
 
                     b.ToTable("Categories");
                 });
@@ -292,19 +286,12 @@ namespace CarRentingSystem.Data.Migrations
             modelBuilder.Entity("CarRentingSystem.Data.Models.Car", b =>
                 {
                     b.HasOne("CarRentingSystem.Data.Models.Category", "Category")
-                        .WithMany()
+                        .WithMany("Cars")
                         .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Category");
-                });
-
-            modelBuilder.Entity("CarRentingSystem.Data.Models.Category", b =>
-                {
-                    b.HasOne("CarRentingSystem.Data.Models.Category", null)
-                        .WithMany("Categories")
-                        .HasForeignKey("CategoryId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -360,7 +347,7 @@ namespace CarRentingSystem.Data.Migrations
 
             modelBuilder.Entity("CarRentingSystem.Data.Models.Category", b =>
                 {
-                    b.Navigation("Categories");
+                    b.Navigation("Cars");
                 });
 #pragma warning restore 612, 618
         }

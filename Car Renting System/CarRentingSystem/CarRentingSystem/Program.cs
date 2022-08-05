@@ -1,17 +1,18 @@
 using CarRentingSystem.Data;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using CarRentingSystem.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<CarRentingDbContext>(options =>
+builder.Services.AddDbContext<CarRentingDbCotext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<CarRentingDbContext>();
+    .AddEntityFrameworkStores<CarRentingDbCotext>();
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
@@ -27,6 +28,8 @@ else
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
+app.PrepareDatabase();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
