@@ -14,12 +14,26 @@
         public CarsController(CarRentingDbCotext dbCotext) 
             => this.dbContext = dbCotext;
 
+        // Model Biding steps:
+        //   1. Method for GET http where we give the view model that will be show 
+        //   2. Method for POST http where get the given data from form
+        //   3. Validation steps
+        //   4. Return same View with same view model or Redirect...
         public IActionResult Add()
         {
             return this.View(new AddCarFormModel() 
                     { Categories = GetCarCategories() });
         }
         
+        // Validation steps:
+        //   1. Attributes 
+        //   2. Write custom validation logic (optional)
+        //   3. Check is ModelState is Valid -> If it is not: 
+        //                                      - Show user mistakes
+        //                                      - Return View
+        //   4. Mapping view model to database entity
+        //   5. adding to database new entity and save changes
+        //   6. Redirect to other page
         [HttpPost]
         public IActionResult Add(AddCarFormModel car)
         {

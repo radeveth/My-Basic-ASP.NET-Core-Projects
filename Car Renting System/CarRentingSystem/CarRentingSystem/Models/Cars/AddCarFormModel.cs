@@ -4,7 +4,10 @@
     using CarRentingSystem.Data;
     using CarRentingSystem.Data.Models;
     using System.ComponentModel.DataAnnotations;
+    using CarRentingSystem.Models.ValidationAttributes;
     
+
+    // IValidateableObject -> Custom validation logic
     public class AddCarFormModel
     {
         public AddCarFormModel()
@@ -33,7 +36,8 @@
             ErrorMessage = "Description must be with minimum length of {2}.")]
         public string Description { get; init; }
 
-        [Url]
+        //[IsValidUrlAttribute(nameof(ImageUrl))]
+        [Url(ErrorMessage = "The Image Url field is not valid.")]
         [Required]
         [Display(Name = "Image Url")]
         [StringLength(DataConstants.UrlMaxLength)]

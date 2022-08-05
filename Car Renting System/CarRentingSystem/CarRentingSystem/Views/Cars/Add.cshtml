@@ -8,7 +8,8 @@
     <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
         <h2 class="heading-margin text-center">@ViewBag.Title</h2>
 
-        <form method="post" class="fw-bold">
+        @* Enctype is for accessing the form to work with files *@
+        <form method="post" class="fw-bold" enctype="multipart/form-data">
             <div class="form-group form-margin">
                 <label asp-for="Brand"></label>
                 <input asp-for="Brand" class="form-control" placeholder="BMW, Mercedes, etc...">
@@ -46,9 +47,11 @@
             </div>
 
             <input class="btn btn-primary mt-3 float-end" type="submit" value="Save" />
+
+            @* <input type="file" name="Image" value"Image"/> *@
         </form>
         
-        <!--<div asp-validation-summary="All"></div>-->
+        @* <div asp-validation-summary="All"></div> *@
 
     </div>
 </div>
