@@ -11,7 +11,7 @@
     {
         private readonly CarRentingDbCotext dbContext;
 
-        public CarsController(CarRentingDbCotext dbCotext) 
+        public CarsController(CarRentingDbCotext dbCotext)
             => this.dbContext = dbCotext;
 
         // Model Biding steps:
@@ -21,10 +21,10 @@
         //   4. Return same View with same view model or Redirect...
         public IActionResult Add()
         {
-            return this.View(new AddCarFormModel() 
-                    { Categories = GetCarCategories() });
+            return this.View(new AddCarFormModel()
+            { Categories = GetCarCategories() });
         }
-        
+
         // Validation steps:
         //   1. Attributes 
         //   2. Write custom validation logic (optional)
@@ -62,12 +62,52 @@
             return RedirectToAction(nameof(All), "Cars");
         }
 
-        public IActionResult All()
+        public IActionResult All([FromQuery] AllCarsQueryModel query)
         {
-            IEnumerable<CarListingViewModel> cars = this.dbContext
-               .Cars
-               .OrderByDescending(c => c.Id)
-               .Select(c => new CarListingViewModel()
+            var cars = this.dbContext.Cars.AsQueryable();
+            IEnumerable<string> brands = cars
+                .Select(c => c.Brand)
+                .Distinct()
+                .OrderBy(c => c);
+
+            // Sorting by default is by date (newest)
+            cars = query.Sorting switch
+            {
+                CarSorting.DateCreatedOldest => cars.OrderBy(c => c.Id),
+                CarSorting.Year => cars.OrderByDescending(c => c.Year),
+                CarSorting.Brand => cars.OrderByDescending(c => c.Brand),
+                CarSorting.Model => cars.OrderByDescending(c => c.Model),
+                CarSorting.BrandAndModel => cars
+                    .OrderByDescending(c => c.Brand).ThenBy(c => c.Model),
+                CarSorting.ModelAndBrand => cars
+                    .OrderByDescending(c => c.Model).ThenBy(c => c.Brand),
+                _ => cars.OrderByDescending(c => c.Id)
+            };
+
+            if (!String.IsNullOrEmpty(query.Brand))
+            {
+                cars = cars.Where(c => c.Brand.ToLower() == query.Brand.ToLower());
+            }
+
+            if (!String.IsNullOrEmpty(query.SearchTerm))
+            {
+                //string[] searchTermParts = searchTerm
+                //    .Split(" ", StringSplitOptions.RemoveEmptyEntries)
+                //    .ToArray();
+
+                query.SearchTerm = query.SearchTerm.Replace(" ", string.Empty).ToLower();
+                //string compareSearchigPattern = 
+
+                cars = cars
+                    .Where(c =>
+                        (c.Brand + c.Model).ToLower().Contains(query.SearchTerm) ||
+                        (c.Description.ToLower()).Contains(query.SearchTerm));
+            }
+
+            IEnumerable<CarListingViewModel> listingCars = cars
+                .Skip(SkipPagesLogic(query))
+                .Take(AllCarsQueryModel.CarsPerPage)
+                .Select(c => new CarListingViewModel()
                 {
                     Id = c.Id,
                     Brand = c.Brand,
@@ -77,20 +117,25 @@
                     Category = c.Category.Name
                 });
 
-            return this.View(cars);
+
+            return this.View(new AllCarsQueryModel()
+            {
+                Cars = listingCars,
+                Brands = brands,
+            });
         }
 
         // Helpful methods
-        private IEnumerable<CarCategoryViewModel> GetCarCategories() 
+        private IEnumerable<CarCategoryViewModel> GetCarCategories()
             => this.dbContext
                    .Categories
                    .Select(x => new CarCategoryViewModel
-                   { 
-                       Id = x.Id, 
+                   {
+                       Id = x.Id,
                        Name = x.Name
                    })
                    .ToList();
-        
+
 
         private void ValidateCarFormModelData(AddCarFormModel car, CarRentingDbCotext dbContext)
         {
@@ -112,6 +157,11 @@
                     .AddModelError(nameof(car.CategoryId),
                     "Invalid category value for this Id!!!");
             }
+        }
+
+        private int SkipPagesLogic(AllCarsQueryModel query)
+        {
+            return (query.CurrentPage - 1) * AllCarsQueryModel.CarsPerPage;
         }
     }
 }

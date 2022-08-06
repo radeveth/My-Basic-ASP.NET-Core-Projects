@@ -1,30 +1,74 @@
-﻿@model IEnumerable<CarListingViewModel>
+﻿@model AllCarsQueryModel
 
 @{
     ViewData["Title"] = "All Cars";
 }
 
+<form method="GET">
+    <div class="row">
+        <div class="col-md-4 mt-3">
+            <div class="form-group">
+                <label asp-for="Brand" class="form-label"></label>
+                <select asp-for="Brand" class="form-control">
+                    <option value="">All</option>
+                    @foreach (var brand in Model.Brands)
+                    {
+                        <option value="@brand">@brand</option>
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="col-md-4 mt-3">
+            <div class="form-group">
+                <label asp-for="Sorting" class="form-label"></label>
+                <select asp-for="Sorting" class="form-control">
+                    <option value="0" selected>Date Created (Newest)</option>
+                    <option value="1">Date Created (Oldest)</option>
+                    <option value="2">Year</option>
+                    <option value="3">Brand</option>
+                    <option value="4">Model</option>
+                    <option value="5">Brand and Model</option>
+                    <option value="6">Model and Brand</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-4 mt-3">
+            <div class="form-group">
+                <label asp-for="SearchTerm" class="form-label"></label>
+                <input asp-for="SearchTerm" type="search" class="form-control" placeholder="BMW E640D, etc...">
+            </div>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col-sm-12 offset-md-4 col-md-4">
+            <input type="submit" class="btn btn-primary form-control" value="Search">
+        </div>
+    </div>
+</form>
+
+<div class="mb-5"></div>
+
 <div class="container">
     <div class="row">
-        @foreach (var car in Model)
+        @foreach (var car in Model.Cars)
         {
             <div class="col-12 col-md-4">
-            <a asp-controller="Home" asp-action="Details" asp-route-id="@car.Id" class="card mb-3 shadow" style="max-height: 200px; border: 0; border-radius: 10px; overflow: hidden;">
-                <img class="card-img-top" style="border-radius: 10px;" src="@car.ImageUrl">
+                <a asp-controller="Home" asp-action="Details" asp-route-id="@car.Id" class="card mb-3 shadow" style="max-height: 200px; border: 0; border-radius: 10px; overflow: hidden;">
+                    <img class="card-img-top" style="border-radius: 10px;" src="@car.ImageUrl">
 
-                <div class="exercise-card-overlay card-img-overlay-gradient">
-                </div>
+                    <div class="exercise-card-overlay card-img-overlay-gradient">
+                    </div>
 
-                <div class="position-absolute p-3">
-                    <span class="badge rounded-sm" style="background-color:black; color:white">@car.Brand @car.Model - @car.Category (@car.Year)</span>
-                </div>
+                    <div class="position-absolute p-3">
+                        <span class="badge rounded-sm" style="background-color:black; color:white">@car.Brand @car.Model - @car.Category (@car.Year)</span>
+                    </div>
 
-                <div class="card-img-overlay p-3 mb-0">
-                    <small class="text-white mb-0"></small>
-                    <h5 class="text-white mb-0"></h5>
-                </div>
-            </a>
-        </div>
+                    <div class="card-img-overlay p-3 mb-0">
+                        <small class="text-white mb-0"></small>
+                        <h5 class="text-white mb-0"></h5>
+                    </div>
+                </a>
+            </div>
         }
     </div>
 </div>
