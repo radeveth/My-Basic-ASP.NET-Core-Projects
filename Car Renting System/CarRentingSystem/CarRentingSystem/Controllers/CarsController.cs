@@ -65,7 +65,7 @@
         public IActionResult All([FromQuery] AllCarsQueryModel query)
         {
             var cars = this.dbContext.Cars.AsQueryable();
-            IEnumerable<string> brands = cars
+            query.Brands = cars
                 .Select(c => c.Brand)
                 .Distinct()
                 .OrderBy(c => c);
@@ -104,8 +104,8 @@
                         (c.Description.ToLower()).Contains(query.SearchTerm));
             }
 
-            IEnumerable<CarListingViewModel> listingCars = cars
-                .Skip(SkipPagesLogic(query))
+            query.Cars = cars
+                .Skip((query.CurrentPage - 1) * AllCarsQueryModel.CarsPerPage)
                 .Take(AllCarsQueryModel.CarsPerPage)
                 .Select(c => new CarListingViewModel()
                 {
@@ -117,12 +117,8 @@
                     Category = c.Category.Name
                 });
 
-
-            return this.View(new AllCarsQueryModel()
-            {
-                Cars = listingCars,
-                Brands = brands,
-            });
+            query.TotalCars = cars.Count();
+            return this.View(query);
         }
 
         // Helpful methods

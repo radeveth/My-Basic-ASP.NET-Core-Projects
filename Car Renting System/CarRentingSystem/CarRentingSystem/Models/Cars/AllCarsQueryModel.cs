@@ -11,6 +11,7 @@
         public string Brand { get; set; }
         public IEnumerable<string> Brands { get; set; }
 
+        public int TotalCars { get; set; }
         public int CurrentPage { get; set; } = 1;
 
         [Display(Name = "Search")]
