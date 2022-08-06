@@ -59,10 +59,28 @@
             this.dbContext.Cars.Add(carModel);
             this.dbContext.SaveChanges();
 
-            return RedirectToAction(nameof(Index), "Home");
+            return RedirectToAction(nameof(All), "Cars");
         }
 
+        public IActionResult All()
+        {
+            IEnumerable<CarListingViewModel> cars = this.dbContext
+               .Cars
+               .OrderByDescending(c => c.Id)
+               .Select(c => new CarListingViewModel()
+                {
+                    Id = c.Id,
+                    Brand = c.Brand,
+                    Model = c.Model,
+                    ImageUrl = c.ImageUrl,
+                    Year = c.Year,
+                    Category = c.Category.Name
+                });
 
+            return this.View(cars);
+        }
+
+        // Helpful methods
         private IEnumerable<CarCategoryViewModel> GetCarCategories() 
             => this.dbContext
                    .Categories

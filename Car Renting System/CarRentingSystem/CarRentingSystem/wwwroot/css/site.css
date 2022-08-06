@@ -25,3 +25,11 @@ body {
 .form-margin {
     margin-top: 15px;
 }
+
+alink {
+    text-decoration: underline !important;
+}
+
+ahover {
+    text-decoration: none !important;
+}

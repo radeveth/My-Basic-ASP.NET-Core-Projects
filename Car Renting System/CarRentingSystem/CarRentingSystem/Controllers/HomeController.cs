@@ -1,12 +1,47 @@
-﻿using CarRentingSystem.Models;
-using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
-
-namespace CarRentingSystem.Controllers
+﻿namespace CarRentingSystem.Controllers
 {
+
+    using System.Diagnostics;
+    using CarRentingSystem.Data;
+    using CarRentingSystem.Models;
+    using Microsoft.AspNetCore.Mvc;
+    using CarRentingSystem.Models.Home;
+    
     public class HomeController : Controller
     {
-        public IActionResult Index() => View();
+        private readonly CarRentingDbCotext dbContext;
+
+        public HomeController(CarRentingDbCotext dbContext)
+        {
+            this.dbContext = dbContext;
+        }
+
+        public IActionResult Index()
+        {
+            int totalCars = this.dbContext.Cars.Count();
+
+            List<CarIndexViewModel> cars = this.dbContext
+               .Cars
+               .OrderByDescending(c => c.Id)
+               .Take(3)
+               .Select(c => new CarIndexViewModel()
+               {
+                   Id = c.Id,
+                   Brand = c.Brand,
+                   Model = c.Model,
+                   ImageUrl = c.ImageUrl,
+                   Year = c.Year
+               })
+               .ToList();
+
+            return this.View(new IndexViewModel()
+            {
+                TotalCars = totalCars,
+                Cars = new List<CarIndexViewModel>(cars)
+            });
+
+        }
+
 
         [ResponseCache
             (Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
