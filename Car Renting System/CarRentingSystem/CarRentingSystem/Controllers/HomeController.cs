@@ -19,6 +19,7 @@
         public IActionResult Index()
         {
             int totalCars = this.dbContext.Cars.Count();
+            int totalUsers = this.dbContext.Users.Count();
 
             List<CarIndexViewModel> cars = this.dbContext
                .Cars
@@ -37,6 +38,7 @@
             return this.View(new IndexViewModel()
             {
                 TotalCars = totalCars,
+                TotalUsers = totalUsers,
                 Cars = new List<CarIndexViewModel>(cars)
             });
 
