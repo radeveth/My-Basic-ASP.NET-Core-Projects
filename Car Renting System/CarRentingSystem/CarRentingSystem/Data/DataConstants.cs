@@ -35,7 +35,10 @@
         // Delaer Model
         public class DealerConstants
         {
+            public const int NameMinLength = 3;
             public const int NameMaxLength = 100;
+
+            public const int PhoneNumberMinLength = 6;
             public const int PhoneNumberMaxLength = 20;
         }
     }

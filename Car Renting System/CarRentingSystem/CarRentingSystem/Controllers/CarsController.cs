@@ -6,6 +6,9 @@
     using Microsoft.AspNetCore.Mvc;
     using CarRentingSystem.Models.Cars;
     using CarRentingSystem.Data.Models;
+    using Microsoft.AspNetCore.Authorization;
+    using System.Security.Claims;
+    using CarRentingSystem.Infrastructure;
 
     public class CarsController : Controller
     {
@@ -19,8 +22,15 @@
         //   2. Method for POST http where get the given data from form
         //   3. Validation steps
         //   4. Return same View with same view model or Redirect...
+        [Authorize]
         public IActionResult Add()
         {
+            if (!this.UserIsDelaer())
+            {
+                return RedirectToAction
+                    (nameof(DealersComtroller.Create), "Dealers");
+            }
+
             return this.View(new AddCarFormModel()
             { Categories = GetCarCategories() });
         }
@@ -35,6 +45,7 @@
         //   5. adding to database new entity and save changes
         //   6. Redirect to other page
         [HttpPost]
+        [Authorize]
         public IActionResult Add(AddCarFormModel car)
         {
             ValidateCarFormModelData(car, dbContext);
@@ -122,6 +133,12 @@
         }
 
         // Helpful methods
+
+        private bool UserIsDelaer() 
+            => this.dbContext
+                .Dealers
+                .Any(d => d.UserId == ClaimsPrincipalExtensions.GetId(this.User));
+
         private IEnumerable<CarCategoryViewModel> GetCarCategories()
             => this.dbContext
                    .Categories
