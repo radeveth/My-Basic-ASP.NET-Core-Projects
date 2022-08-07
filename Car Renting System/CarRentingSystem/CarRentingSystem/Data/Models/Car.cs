@@ -4,25 +4,27 @@
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
+    using static DataConstants.CarConstants;
+    using static DataConstants.UrlConstants;
     public class Car
     {
         [Key]
         public int Id { get; init; }
 
         [Required]
-        [MaxLength(DataConstants.CarBarndMaxLength)]
+        [MaxLength(BarndMaxLength)]
         public string Brand { get; set; }
 
         [Required]
-        [MaxLength(DataConstants.CarModelMaxLength)]
+        [MaxLength(ModelMaxLength)]
         public string Model { get; set; }
 
         [Required]
-        [MaxLength(DataConstants.CarDescriptionMaxLength)]
+        [MaxLength(DescriptionMaxLength)]
         public string Description { get; set; }
 
         [Required]
-        [MaxLength(DataConstants.UrlMaxLength)]
+        [MaxLength(UrlMaxLength)]
         public string ImageUrl { get; set; }
 
         [Required]
@@ -32,5 +34,8 @@
         [ForeignKey(nameof(Category))]
         public int CategoryId { get; set; }
         public virtual Category Category { get; set; }
+
+        public int DealerId { get; set; }
+        public virtual Dealer Dealer { get; set; }
     }
 }

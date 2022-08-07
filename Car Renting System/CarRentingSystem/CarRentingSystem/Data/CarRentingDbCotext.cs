@@ -12,16 +12,18 @@
             : base(options)
         {
         }
+        public DbSet<Car> Cars { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Dealer> Dealers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.ApplyConfiguration(new CarConfiguration());
             builder.ApplyConfiguration(new CategoryConfiguration());
+            builder.ApplyConfiguration(new DealerConfiguration());
 
             base.OnModelCreating(builder);
         }
 
-        public DbSet<Car> Cars { get; set; }
-        public DbSet<Category> Categories { get; set; }
     }
 }

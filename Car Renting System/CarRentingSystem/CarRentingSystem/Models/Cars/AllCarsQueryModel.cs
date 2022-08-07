@@ -6,7 +6,7 @@
 
     public class AllCarsQueryModel
     {
-        public const int CarsPerPage = 2;
+        public const int CarsPerPage = 3;
 
         public string Brand { get; set; }
         public IEnumerable<string> Brands { get; set; }

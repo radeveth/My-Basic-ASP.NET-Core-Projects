@@ -1,26 +1,42 @@
 ﻿namespace CarRentingSystem.Data
 {
-    public static class DataConstants
+    public class DataConstants
     {
         // Max Url
-        public const int UrlMaxLength = 2048;
+        public class UrlConstants
+        {
+            public const int UrlMaxLength = 2048;
+        }
 
 
         // Car Model
-        public const int CarBarndMinLength = 2;
-        public const int CarBarndMaxLength = 20;
+        public class CarConstants
+        {
+            public const int BarndMinLength = 2;
+            public const int BarndMaxLength = 20;
 
-        public const int CarModelMinLength = 3;
-        public const int CarModelMaxLength = 50;
+            public const int ModelMinLength = 3;
+            public const int ModelMaxLength = 50;
 
-        public const int CarDescriptionMinLength = 10;
-        public const int CarDescriptionMaxLength = 10000;
+            public const int DescriptionMinLength = 10;
+            public const int DescriptionMaxLength = 10000;
 
-        public const int CarMinYear = 2000;
-        public const int CarMaxYear = 2050;
+            public const int MinYear = 2000;
+            public const int MaxYear = 2050;
+        }
 
 
         // Category Model
-        public const int CategoryNameMaxLength = 25;
+        public class CategoryConstants
+        {
+            public const int NameMaxLength = 25;
+        }
+
+        // Delaer Model
+        public class DealerConstants
+        {
+            public const int NameMaxLength = 100;
+            public const int PhoneNumberMaxLength = 20;
+        }
     }
 }

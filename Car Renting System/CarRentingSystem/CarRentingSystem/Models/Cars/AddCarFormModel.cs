@@ -5,6 +5,9 @@
     using CarRentingSystem.Data.Models;
     using System.ComponentModel.DataAnnotations;
     using CarRentingSystem.Models.ValidationAttributes;
+
+    using static Data.DataConstants.CarConstants;
+    using static Data.DataConstants.UrlConstants;
     
 
     // IValidateableObject -> Custom validation logic
@@ -16,23 +19,17 @@
         }
 
         [Required]
-        [StringLength(
-            DataConstants.CarBarndMaxLength, 
-            MinimumLength = DataConstants.CarBarndMinLength,
+        [StringLength(BarndMaxLength, MinimumLength = BarndMinLength,
             ErrorMessage = "Brand must be at least {2} symbols.")]
         public string Brand { get; init; }
 
         [Required]
-        [StringLength(
-            DataConstants.CarModelMaxLength,
-            MinimumLength = DataConstants.CarBarndMinLength,
+        [StringLength(ModelMaxLength,MinimumLength = BarndMinLength,
             ErrorMessage = "Model must be at least {2} symbols.")]
         public string Model { get; init; }
 
         [Required]
-        [StringLength
-            (DataConstants.CarDescriptionMaxLength,
-             MinimumLength = DataConstants.CarDescriptionMinLength,
+        [StringLength(DescriptionMaxLength, MinimumLength = DescriptionMinLength,
             ErrorMessage = "Description must be with minimum length of {2}.")]
         public string Description { get; init; }
 
@@ -40,11 +37,11 @@
         [Url(ErrorMessage = "The Image Url field is not valid.")]
         [Required]
         [Display(Name = "Image Url")]
-        [StringLength(DataConstants.UrlMaxLength)]
+        [StringLength(UrlMaxLength)]
         public string ImageUrl { get; init; }
 
         [Required(ErrorMessage = "The Year field is required.")]
-        [Range(DataConstants.CarMinYear, DataConstants.CarMaxYear)]
+        [Range(MinYear, MaxYear)]
         public int Year { get; init; }
         
         [Display(Name = "Category")]

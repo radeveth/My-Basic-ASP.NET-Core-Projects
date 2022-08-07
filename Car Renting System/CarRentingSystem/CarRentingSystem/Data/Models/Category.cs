@@ -2,7 +2,9 @@
 {
 
     using System.ComponentModel.DataAnnotations;
-    
+
+    using static DataConstants.CategoryConstants;
+
     public class Category
     {
         public Category()
@@ -14,7 +16,7 @@
         public int Id { get; set; }
 
         [Required]
-        [MaxLength(DataConstants.CategoryNameMaxLength)]
+        [MaxLength(NameMaxLength)]
         public string Name { get; set; }
 
         public virtual ICollection<Car> Cars { get; init; }
