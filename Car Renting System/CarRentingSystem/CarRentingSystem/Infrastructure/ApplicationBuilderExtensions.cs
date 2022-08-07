@@ -15,7 +15,7 @@
             using var scopedServices = app.ApplicationServices.CreateScope();
 
             var data = scopedServices.ServiceProvider
-                .GetService<CarRentingDbCotext>();
+                .GetService<CarRentingDbContext>();
 
             data.Database.Migrate();
             SeedCategories(data);
@@ -23,7 +23,7 @@
             return app;
         }
 
-        private static void SeedCategories(CarRentingDbCotext dbContext)
+        private static void SeedCategories(CarRentingDbContext dbContext)
         {
             if (dbContext.Categories.Any())
             {

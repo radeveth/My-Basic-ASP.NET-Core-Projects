@@ -3,22 +3,22 @@
 
     using CarRentingSystem.Data;
     using Microsoft.AspNetCore.Mvc;
+    using CarRentingSystem.Data.Models;
+    using CarRentingSystem.Models.Dealers;
     using CarRentingSystem.Infrastructure;
     using Microsoft.AspNetCore.Authorization;
-    using CarRentingSystem.Models.Dealers;
-    using CarRentingSystem.Data.Models;
 
-    public class DealersComtroller : Controller
+    public class DealersController : Controller
     {
-        private readonly CarRentingDbCotext dbCotext;
+        private readonly CarRentingDbContext dbCotext;
 
-        public DealersComtroller(CarRentingDbCotext dbCotext)
+        public DealersController(CarRentingDbContext dbCotext)
         {
             this.dbCotext = dbCotext;
         }
 
         [Authorize]
-        public IActionResult Create()
+        public IActionResult Become()
         {
             // TODO: Check if user already is dealer and remove become dealer link if it is
 
@@ -27,7 +27,7 @@
 
         [Authorize]
         [HttpPost]
-        public IActionResult Create(BecomeDealerFormModel dealer)
+        public IActionResult Become(BecomeDealerFormModel dealer)
         {
             if (UserIsDealerAlready())
             {

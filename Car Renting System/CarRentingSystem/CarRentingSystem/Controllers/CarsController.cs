@@ -12,9 +12,9 @@
 
     public class CarsController : Controller
     {
-        private readonly CarRentingDbCotext dbContext;
+        private readonly CarRentingDbContext dbContext;
 
-        public CarsController(CarRentingDbCotext dbCotext)
+        public CarsController(CarRentingDbContext dbCotext)
             => this.dbContext = dbCotext;
 
         // Model Biding steps:
@@ -28,7 +28,7 @@
             if (!this.UserIsDelaer())
             {
                 return RedirectToAction
-                    (nameof(DealersComtroller.Create), "Dealers");
+                    (nameof(DealersController.Become), "Dealers");
             }
 
             return this.View(new AddCarFormModel()
@@ -44,8 +44,8 @@
         //   4. Mapping view model to database entity
         //   5. adding to database new entity and save changes
         //   6. Redirect to other page
-        [HttpPost]
         [Authorize]
+        [HttpPost]
         public IActionResult Add(AddCarFormModel car)
         {
             ValidateCarFormModelData(car, dbContext);
@@ -64,7 +64,8 @@
                 Description = car.Description,
                 ImageUrl = car.ImageUrl,
                 Year = car.Year,
-                CategoryId = car.CategoryId
+                CategoryId = car.CategoryId,
+                DealerId = this.GetCurrentDealerId()
             };
 
             this.dbContext.Cars.Add(carModel);
@@ -139,6 +140,14 @@
                 .Dealers
                 .Any(d => d.UserId == ClaimsPrincipalExtensions.GetId(this.User));
 
+        private int GetCurrentDealerId()
+            => this.dbContext
+                   .Dealers
+                   .Where(d => d.UserId == 
+                            ClaimsPrincipalExtensions.GetId(this.User))
+                   .Select(d => d.Id)
+                   .FirstOrDefault();
+
         private IEnumerable<CarCategoryViewModel> GetCarCategories()
             => this.dbContext
                    .Categories
@@ -150,7 +159,7 @@
                    .ToList();
 
 
-        private void ValidateCarFormModelData(AddCarFormModel car, CarRentingDbCotext dbContext)
+        private void ValidateCarFormModelData(AddCarFormModel car, CarRentingDbContext dbContext)
         {
             Category givenCarCategory = dbContext
                 .Categories

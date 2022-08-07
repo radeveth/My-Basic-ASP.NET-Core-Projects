@@ -6,9 +6,9 @@
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using CarRentingSystem.Data.Configurations;
 
-    public class CarRentingDbCotext : IdentityDbContext
+    public class CarRentingDbContext : IdentityDbContext
     {
-        public CarRentingDbCotext(DbContextOptions<CarRentingDbCotext> options)
+        public CarRentingDbContext(DbContextOptions<CarRentingDbContext> options)
             : base(options)
         {
         }

@@ -8,7 +8,9 @@
         public static string GetId
             (ClaimsPrincipal user)
         {
-            return user.FindFirst(ClaimTypes.NameIdentifier).Value;
+            string id = user.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            return id;
         }
     }
 }

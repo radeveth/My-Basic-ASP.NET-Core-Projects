@@ -9,9 +9,9 @@
     
     public class HomeController : Controller
     {
-        private readonly CarRentingDbCotext dbContext;
+        private readonly CarRentingDbContext dbContext;
 
-        public HomeController(CarRentingDbCotext dbContext)
+        public HomeController(CarRentingDbContext dbContext)
         {
             this.dbContext = dbContext;
         }
