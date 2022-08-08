@@ -12,9 +12,25 @@
             : base(options)
         {
         }
+<<<<<<< Updated upstream
         public DbSet<Car> Cars { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Dealer> Dealers { get; set; }
+=======
+
+        public DbSet<Car> Cars { get; init; }
+        public DbSet<Category> Categories { get; init; }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.UseSqlServer(configuration[""ConnectionStrings: DefaultConnection""]);
+            }
+
+            base.OnConfiguring(optionsBuilder);
+        }
+>>>>>>> Stashed changes
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
