@@ -89,10 +89,39 @@
 
 <div class="mb-5"></div>
 
-<div class="jumbotron">
-    <div class="row bg-primary text-white text-center fw-bold h-100 rounded-pill btn-lg">
-        <div class="col-4">Total Cars: @Model.TotalCars</div>
-        <div class="col-4">Total Users: @Model.TotalUsers</div>
-        <div class="col-4">Total Rents: @Model.TotalRents</div>
+<div class="row text-center" id="btn-statistics">
+    <div class="col-12">
+        <button class="btn-primary btn-primary rounded-pill">Show statistics</button>
     </div>
 </div>
+
+
+<div class="jumbotron d-none" id="jumbotron-statistics">
+    <div class="row bg-primary text-white text-center fw-bold h-100 rounded-pill btn-lg">
+        <div class="col-4" id="statistics-totalCars">Total Cars: </div>
+        <div class="col-4" id="statistics-totalUsers">Total Users: </div>
+        <div class="col-4" id="statistics-totalRents">Total Rents: </div>
+    </div>
+</div>
+
+@section  Scripts {
+<script>
+    $('#btn-statistics').on('click', (e) => {
+
+      $.get('/api/statistics/get', (data) => {
+          let totalCarsElement = document.querySelector('#statistics-totalCars');
+          let totalUsersElement = document.querySelector('#statistics-totalUsers');
+          let totalRentsElement = document.querySelector('#statistics-totalRents');
+          let jumbotronElement = document.querySelector('#jumbotron-statistics');
+          
+          totalCarsElement.textContent += data.totalCars;
+          totalUsersElement.textContent += data.totalUsers;
+          totalRentsElement.textContent += data.totalRents;
+
+          e.currentTarget.classList.add('d-none');
+          jumbotronElement.classList.remove('d-none');
+          
+        })
+    })
+</script>
+}

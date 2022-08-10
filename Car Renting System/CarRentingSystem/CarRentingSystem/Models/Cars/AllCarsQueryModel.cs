@@ -1,7 +1,7 @@
 ﻿namespace CarRentingSystem.Models.Cars
 {
-
     using System.Collections.Generic;
+    using CarRentingSystem.Services.Cars;
     using System.ComponentModel.DataAnnotations;
 
     public class AllCarsQueryModel
@@ -17,6 +17,6 @@
         [Display(Name = "Search")]
         public string SearchTerm { get; set; }
         public CarSorting Sorting { get; set; }
-        public IEnumerable<CarListingViewModel> Cars { get; set; }
+        public IEnumerable<CarServiceModel> Cars { get; set; }
     }
 }

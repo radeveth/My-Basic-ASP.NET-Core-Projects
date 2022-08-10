@@ -7,15 +7,18 @@
     using CarRentingSystem.Models.Cars;
     using CarRentingSystem.Data.Models;
     using Microsoft.AspNetCore.Authorization;
-    using System.Security.Claims;
     using CarRentingSystem.Infrastructure;
+    using CarRentingSystem.Services.Cars;
 
     public class CarsController : Controller
     {
+        private readonly ICarService carService;
         private readonly CarRentingDbContext dbContext;
-
-        public CarsController(CarRentingDbContext dbCotext)
-            => this.dbContext = dbCotext;
+        public CarsController(CarRentingDbContext dbContext, ICarService carService)
+        {
+            this.carService = carService;
+            this.dbContext = dbContext;
+        }
 
         // Model Biding steps:
         //   1. Method for GET http where we give the view model that will be show 
@@ -76,60 +79,18 @@
 
         public IActionResult All([FromQuery] AllCarsQueryModel query)
         {
-            var cars = this.dbContext.Cars.AsQueryable();
-            query.Brands = cars
-                .Select(c => c.Brand)
-                .Distinct()
-                .OrderBy(c => c);
+            CarQueryServiceModel carQueryServiceModel = carService.All
+                (query.Brand, 
+                query.SearchTerm, 
+                query.Sorting, 
+                query.CurrentPage, 
+                AllCarsQueryModel.CarsPerPage);
 
-            // Sorting by default is by date (newest)
-            cars = query.Sorting switch
-            {
-                CarSorting.DateCreatedOldest => cars.OrderBy(c => c.Id),
-                CarSorting.Year => cars.OrderByDescending(c => c.Year),
-                CarSorting.Brand => cars.OrderByDescending(c => c.Brand),
-                CarSorting.Model => cars.OrderByDescending(c => c.Model),
-                CarSorting.BrandAndModel => cars
-                    .OrderByDescending(c => c.Brand).ThenBy(c => c.Model),
-                CarSorting.ModelAndBrand => cars
-                    .OrderByDescending(c => c.Model).ThenBy(c => c.Brand),
-                _ => cars.OrderByDescending(c => c.Id)
-            };
-
-            if (!String.IsNullOrEmpty(query.Brand))
-            {
-                cars = cars.Where(c => c.Brand.ToLower() == query.Brand.ToLower());
-            }
-
-            if (!String.IsNullOrEmpty(query.SearchTerm))
-            {
-                //string[] searchTermParts = searchTerm
-                //    .Split(" ", StringSplitOptions.RemoveEmptyEntries)
-                //    .ToArray();
-
-                query.SearchTerm = query.SearchTerm.Replace(" ", string.Empty).ToLower();
-                //string compareSearchigPattern = 
-
-                cars = cars
-                    .Where(c =>
-                        (c.Brand + c.Model).ToLower().Contains(query.SearchTerm) ||
-                        (c.Description.ToLower()).Contains(query.SearchTerm));
-            }
-
-            query.Cars = cars
-                .Skip((query.CurrentPage - 1) * AllCarsQueryModel.CarsPerPage)
-                .Take(AllCarsQueryModel.CarsPerPage)
-                .Select(c => new CarListingViewModel()
-                {
-                    Id = c.Id,
-                    Brand = c.Brand,
-                    Model = c.Model,
-                    ImageUrl = c.ImageUrl,
-                    Year = c.Year,
-                    Category = c.Category.Name
-                });
-
-            query.TotalCars = cars.Count();
+            query.TotalCars = carQueryServiceModel.TotalCars;
+            query.CurrentPage = carQueryServiceModel.CurrentPage;
+            query.Cars = carQueryServiceModel.Cars;
+            query.Brands = carService.AllCarBrands();
+            
             return this.View(query);
         }
 

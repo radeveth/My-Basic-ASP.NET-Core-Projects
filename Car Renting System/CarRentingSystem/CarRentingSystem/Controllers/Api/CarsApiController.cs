@@ -1,73 +1,85 @@
 ﻿namespace CarRentingSystem.Controllers.Api
 {
-    using CarRentingSystem.Data;
-    using Microsoft.AspNetCore.Mvc;
-    using CarRentingSystem.Data.Models;
-    using CarRentingSystem.Models.Api.Cars;
-    using System.Linq;
 
-    [Route("api/cars")]
+    using Microsoft.AspNetCore.Mvc;
+    using CarRentingSystem.Services.Cars;
+    using CarRentingSystem.Models.Api.Cars;
+
+    [Route("api/cars/")]
     [ApiController]
     public class CarsApiController : ControllerBase
     {
-        private readonly CarRentingDbContext dbContext;
+        private readonly ICarService carService;
 
-        public CarsApiController(CarRentingDbContext dbContext)
+        public CarsApiController(ICarService carService)
         {
-            this.dbContext = dbContext;
+            this.carService = carService;
         }
+
+        // Example Api
+        //[HttpGet]
+        //[Route("")] 
+        //[Route("{action}")]
+        //public ActionResult<IEnumerable<CarResponseModel>> AllCars()
+        //{
+        //    IEnumerable<CarResponseModel> cars = this.dbContext
+        //        .Cars
+        //        .Select(c => new CarResponseModel()
+        //        {
+        //            Id = c.Id,
+        //            Model = c.Model,
+        //            Brand = c.Brand,
+        //            ImageUrl = c.ImageUrl,
+        //            Year = c.Year,
+        //            Category = c.Category.Name,
+        //        });
+
+        //    if (!cars.Any())
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    return cars.ToList();
+        //}
+
+        // Example Api
+        //[HttpGet]
+        //[Route("{id}")]
+        //public ActionResult<CarResponseModel> Car(int id)
+        //{
+        //    var car = this.dbContext
+        //       .Cars
+        //       .Select(c => new CarResponseModel()
+        //       {
+        //           Id = c.Id,
+        //           Model = c.Model,
+        //           Brand = c.Brand,
+        //           ImageUrl = c.ImageUrl,
+        //           Year = c.Year,
+        //           Category = c.Category.Name
+        //       })
+        //       .FirstOrDefault(c => c.Id == id);
+
+        //    if (car == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    return car;
+        //}
 
         [HttpGet]
-        [Route("")] 
-        [Route("{action}")]
-        public ActionResult<IEnumerable<CarsResponseModel>> AllCars()
+        [Route("all")]
+        public ActionResult<CarQueryServiceModel> All([FromQuery] AllCarsApiRequestModel query)
         {
-            IEnumerable<CarsResponseModel> cars = this.dbContext
-                .Cars
-                .Select(c => new CarsResponseModel()
-                {
-                    Id = c.Id,
-                    Model = c.Model,
-                    Brand = c.Brand,
-                    Description = c.Description,
-                    ImageUrl = c.ImageUrl,
-                    Category = c.Category.Name,
-                    Dealer = c.Dealer.Name,
-                });
+            CarQueryServiceModel carQueryServiceModel = carService.All(query.Brand,
+                query.SearchTerm,
+                query.Sorting,
+                query.CurrentPage,
+                query.CarsPerPage);
 
-            if (!cars.Any())
-            {
-                return NotFound();
-            }
-
-            return cars.ToList();
+            return carQueryServiceModel;
+            
         }
-
-        [HttpGet]
-        [Route("{id}")]
-        public ActionResult<CarsResponseModel> Car(int id)
-        {
-            var car = this.dbContext
-               .Cars
-               .Select(c => new CarsResponseModel()
-               {
-                   Id = c.Id,
-                   Model = c.Model,
-                   Brand = c.Brand,
-                   Description = c.Description,
-                   ImageUrl = c.ImageUrl,
-                   Category = c.Category.Name,
-                   Dealer = c.Dealer.Name,
-               })
-               .FirstOrDefault(c => c.Id == id);
-
-            if (car == null)
-            {
-                return NotFound();
-            }
-
-            return car;
-        }
-
     }
 }
