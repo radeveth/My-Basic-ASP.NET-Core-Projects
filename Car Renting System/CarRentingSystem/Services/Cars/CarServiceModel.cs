@@ -7,6 +7,6 @@
         public string Model { get; set; }
         public string ImageUrl { get; set; }
         public int Year { get; set; }
-        public string Category { get; set; }
+        public string CategoryName { get; set; }
     }
 }

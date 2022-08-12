@@ -19,9 +19,9 @@
             (string brand, 
             string searchTerm, 
             CarSorting sorting, 
-            int currentPage, 
+            int currentPage,
             int carsPerPage,
-            string userId = null)
+            string userId)
         {
             var carsQuery = this.dbContext.Cars.AsQueryable();
 
@@ -66,7 +66,7 @@
                     Model = c.Model,
                     ImageUrl = c.ImageUrl,
                     Year = c.Year,
-                    Category = c.Category.Name
+                    CategoryName = c.Category.Name
                 });
 
             int totalCars = carsQuery.Count();
@@ -108,7 +108,7 @@
                     Description = c.Description,
                     ImageUrl = c.ImageUrl,
                     Year = c.Year,
-                    Category = c.Category.Name,
+                    CategoryName = c.Category.Name,
                     DealerId = c.DealerId,
                     DealerName = c.Dealer.Name,
                     UserId = c.Dealer.UserId
@@ -120,7 +120,7 @@
                 .Categories
                 .Any(x => x.Id == categoryId);
 
-        int AddCar(CarFormModel car, int dealerId)
+        public int AddCar(CarFormModel car, int dealerId)
         {
             var carModel = new Car()
             {

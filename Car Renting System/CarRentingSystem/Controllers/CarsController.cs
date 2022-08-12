@@ -57,10 +57,15 @@
         //   4. Mapping view model to database entity
         //   5. adding to database new entity and save changes
         //   6. Redirect to other page
-        [Authorize]
         [HttpPost]
+        [Authorize]
         public IActionResult Add(CarFormModel car)
         {
+            if (!this.dealerService.IsDealer(this.GetUserId()))
+            {
+                return RedirectToAction(nameof(DealersController.Become), "Dealers");
+            }
+
             var categoryExists = this.carService.CategoryExists(car.CategoryId);
             if (categoryExists == null)
             {
@@ -127,7 +132,28 @@
         [Authorize]
         public IActionResult Edit(int id)
         {
-            return this.View();
+            if (!this.dealerService.IsDealer(this.GetUserId()))
+            {
+                return RedirectToAction(nameof(DealersController.Become), "Dealers");
+            }
+
+            var car = this.carService.Details(id);
+
+            if (car.UserId != this.GetUserId())
+            {
+                return Unauthorized();
+            }
+
+            return this.View(new CarFormModel()
+            {
+                Brand = car.Brand,
+                Model = car.Model,
+                Description = car.Description,
+                ImageUrl = car.ImageUrl,
+                Year = car.Year,
+                CategoryId = car.CategoryId,
+                Categories = this.carService.GetCarCategories()
+            }); ;
         }
 
 
