@@ -7,13 +7,18 @@
     using CarRentingSystem.Models.Dealers;
     using CarRentingSystem.Infrastructure;
     using Microsoft.AspNetCore.Authorization;
+    using CarRentingSystem.Services.Dealers;
+    using CarRentingSystem.Models.Cars;
+    using CarRentingSystem.Services.Cars;
 
     public class DealersController : Controller
     {
         private readonly CarRentingDbContext dbCotext;
+        private readonly IDealerService dealerService;
 
-        public DealersController(CarRentingDbContext dbCotext)
+        public DealersController(CarRentingDbContext dbCotext, IDealerService service)
         {
+            this.dealerService = service;
             this.dbCotext = dbCotext;
         }
 
@@ -53,6 +58,10 @@
             return RedirectToAction(nameof(CarsController.All), "Cars");
         }
 
+        public IActionResult ViewOwnCars()
+        {
+            return this.View();
+        }
 
         private bool UserIsDealerAlready()
             => this.dbCotext

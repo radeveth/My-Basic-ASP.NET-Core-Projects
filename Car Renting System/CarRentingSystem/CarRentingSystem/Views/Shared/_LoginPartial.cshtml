@@ -1,13 +1,35 @@
 ﻿@using Microsoft.AspNetCore.Identity
+@using CarRentingSystem.Data
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
+@inject CarRentingDbContext dbContext
+
+@{
+    var user = await this.UserManager.GetUserAsync(this.User);
+    bool isUserIsDealer = false;
+
+    if (user != null)
+    {
+        string userId = await this.UserManager.GetUserIdAsync(user);
+        isUserIsDealer = this.dbContext.Dealers.Any(d => d.UserId == userId);
+    }
+}
 
 <ul class="navbar-nav">
 @if (SignInManager.IsSignedIn(User))
 {
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="" asp-controller="Dealers" asp-action="Become">Become Dealer</a>
-    </li>
+    @if (!isUserIsDealer)
+    {
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Dealers" asp-action="Become">Become Dealer</a>
+        </li>
+    }
+    else if (isUserIsDealer)
+    {
+        <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Dealers" asp-action="ViewOwnCars">My Cars</a>
+        </li>
+    }
     <li class="nav-item">
         <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Account</a>
     </li>
