@@ -1,1 +1,1 @@
-# ASP.NET-Core-SoftUni-Project
+# My-Basic-ASP.NET-Core-Projects
