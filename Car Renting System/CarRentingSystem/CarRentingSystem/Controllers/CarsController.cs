@@ -9,15 +9,19 @@
     using Microsoft.AspNetCore.Authorization;
     using CarRentingSystem.Infrastructure;
     using CarRentingSystem.Services.Cars;
+    using Microsoft.AspNetCore.Identity;
 
     public class CarsController : Controller
     {
         private readonly ICarService carService;
         private readonly CarRentingDbContext dbContext;
-        public CarsController(CarRentingDbContext dbContext, ICarService carService)
+        private readonly UserManager<IdentityUser> userManager;
+        public CarsController
+            (CarRentingDbContext dbContext, ICarService carService, UserManager<IdentityUser> userManager)
         {
-            this.carService = carService;
             this.dbContext = dbContext;
+            this.carService = carService;
+            this.userManager = userManager;
         }
 
         // Model Biding steps:
@@ -94,6 +98,25 @@
             return this.View(query);
         }
 
+
+        public IActionResult Mine([FromQuery] AllCarsQueryModel query)
+        {
+            CarQueryServiceModel carQueryServiceModel = carService.All
+                (query.Brand,
+                query.SearchTerm,
+                query.Sorting,
+                query.CurrentPage,
+                AllCarsQueryModel.CarsPerPage,
+                this.GetUserId());
+
+            query.TotalCars = carQueryServiceModel.TotalCars;
+            query.CurrentPage = carQueryServiceModel.CurrentPage;
+            query.Cars = carQueryServiceModel.Cars;
+            query.Brands = carService.AllCarBrands();
+
+            return this.View(query);
+        }
+
         // Helpful methods
 
         private bool UserIsDelaer() 
@@ -119,6 +142,8 @@
                    })
                    .ToList();
 
+        private string GetUserId()
+            => this.userManager.GetUserId(this.User);
 
         private void ValidateCarFormModelData(AddCarFormModel car, CarRentingDbContext dbContext)
         {

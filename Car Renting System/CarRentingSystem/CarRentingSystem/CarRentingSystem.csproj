@@ -22,4 +22,9 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.4" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\Dealers\" />
+    <Folder Include="Services\Dealers\" />
+  </ItemGroup>
+
 </Project>

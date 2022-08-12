@@ -1,7 +1,7 @@
 ﻿@model AllCarsQueryModel
 
 @{
-    ViewData["Title"] = "All Cars";
+    ViewData["Title"] = "My Cars";
 
     bool isHaveCars = Model.Cars.Any();
 }
@@ -12,10 +12,10 @@
 
 @if (!isHaveCars)
 {
-    <div class="text-center mb-5"><h1>There are no cars by given criteria!</h1></div>
+    <div class="text-center mb-5"><h1>There are no cars!</h1></div>
 }
 
-<partial name="_CarsPartial" model="Model.Cars"/>
+<partial name="_CarsPartial" model="Model.Cars" />
 
 <div class="mb-5"></div>
 

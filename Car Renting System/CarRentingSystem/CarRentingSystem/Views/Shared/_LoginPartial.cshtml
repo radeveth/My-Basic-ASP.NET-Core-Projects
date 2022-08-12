@@ -2,32 +2,25 @@
 @using CarRentingSystem.Data
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
-@inject CarRentingDbContext dbContext
+@inject IDealerService DealerService
 
 @{
-    var user = await this.UserManager.GetUserAsync(this.User);
-    bool isUserIsDealer = false;
-
-    if (user != null)
-    {
-        string userId = await this.UserManager.GetUserIdAsync(user);
-        isUserIsDealer = this.dbContext.Dealers.Any(d => d.UserId == userId);
-    }
+    bool isDealer = DealerService.IsDealer(this.UserManager.GetUserId(this.User));
 }
 
 <ul class="navbar-nav">
 @if (SignInManager.IsSignedIn(User))
 {
-    @if (!isUserIsDealer)
+    @if (!isDealer)
     {
         <li class="nav-item">
             <a class="nav-link text-dark" asp-area="" asp-controller="Dealers" asp-action="Become">Become Dealer</a>
         </li>
     }
-    else if (isUserIsDealer)
+    else if (isDealer)
     {
         <li class="nav-item">
-                <a class="nav-link text-dark" asp-area="" asp-controller="Dealers" asp-action="ViewOwnCars">My Cars</a>
+                <a class="nav-link text-dark" asp-area="" asp-controller="Cars" asp-action="Mine">My Cars</a>
         </li>
     }
     <li class="nav-item">

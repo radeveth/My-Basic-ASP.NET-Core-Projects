@@ -9,7 +9,8 @@ namespace CarRentingSystem.Services.Cars
             string searchTerm, 
             CarSorting sorting, 
             int currentPage, 
-            int carsPerPage);
+            int carsPerPage,
+            string userId = null);
 
         IEnumerable<string> AllCarBrands();
     }

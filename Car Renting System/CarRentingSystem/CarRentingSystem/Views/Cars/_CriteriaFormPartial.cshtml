@@ -1,0 +1,43 @@
+﻿@model AllCarsQueryModel
+
+<form method="GET">
+    <div class="row">
+        <div class="col-md-4 mt-3">
+            <div class="form-group">
+                <label asp-for="Brand" class="form-label"></label>
+                <select asp-for="Brand" class="form-control">
+                    <option value="">All</option>
+                    @foreach (var brand in Model.Brands)
+                    {
+                        <option value="@brand">@brand</option>
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="col-md-4 mt-3">
+            <div class="form-group">
+                <label asp-for="Sorting" class="form-label"></label>
+                <select asp-for="Sorting" class="form-control">
+                    <option value="0" selected>Date Created (Newest)</option>
+                    <option value="1">Date Created (Oldest)</option>
+                    <option value="2">Year</option>
+                    <option value="3">Brand</option>
+                    <option value="4">Model</option>
+                    <option value="5">Brand and Model</option>
+                    <option value="6">Model and Brand</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-4 mt-3">
+            <div class="form-group">
+                <label asp-for="SearchTerm" class="form-label"></label>
+                <input asp-for="SearchTerm" type="search" class="form-control" placeholder="BMW E640D, etc...">
+            </div>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col-sm-12 offset-md-4 col-md-4">
+            <input type="submit" class="btn btn-primary form-control" value="Search">
+        </div>
+    </div>
+</form>

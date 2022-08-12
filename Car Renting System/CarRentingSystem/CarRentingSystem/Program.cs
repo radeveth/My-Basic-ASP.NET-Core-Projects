@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using CarRentingSystem.Infrastructure;
 using CarRentingSystem.Services.Statistics;
 using CarRentingSystem.Services.Cars;
+using CarRentingSystem.Services.Dealers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,8 +13,10 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<CarRentingDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-builder.Services.AddTransient<IStatisticsService, StatisticsService>();
-builder.Services.AddTransient<ICarService, CarService>();
+builder.Services
+    .AddTransient<ICarService, CarService>()
+    .AddTransient<IDealerService, DealerService>()
+    .AddTransient<IStatisticsService, StatisticsService>();
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options =>
     {

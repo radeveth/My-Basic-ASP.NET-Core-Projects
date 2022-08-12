@@ -4,6 +4,7 @@
     using CarRentingSystem.Data;
     using CarRentingSystem.Models.Cars;
     using System.Collections.Generic;
+    using CarRentingSystem.Data.Models;
 
     public class CarService : ICarService
     {
@@ -19,9 +20,12 @@
             string searchTerm, 
             CarSorting sorting, 
             int currentPage, 
-            int carsPerPage)
+            int carsPerPage,
+            string userId = null)
         {
             var carsQuery = this.dbContext.Cars.AsQueryable();
+
+            carsQuery = userId != null ? carsQuery = carsQuery.Where(c => c.Dealer.UserId == userId) : carsQuery;
 
             // Sorting by default is by date (newest)
             carsQuery = sorting switch
@@ -52,7 +56,7 @@
                         (c.Description.ToLower()).Contains(searchTerm));
             }
 
-            var cars = carsQuery
+            IQueryable<CarServiceModel> cars = carsQuery
                 .Skip((currentPage - 1) * carsPerPage)
                 .Take(carsPerPage)
                 .Select(c => new CarServiceModel()
