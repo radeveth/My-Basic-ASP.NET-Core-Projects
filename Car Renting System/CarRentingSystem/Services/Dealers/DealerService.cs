@@ -12,17 +12,21 @@
     {
         private readonly CarRentingDbContext dbContext;
 
-
         public DealerService(CarRentingDbContext dbContex)
         {
             this.dbContext = dbContex;
         }
 
+        public int GetIdByUser(string userId)
+            => this.dbContext
+                   .Dealers
+                   .Where(d => d.UserId == userId)
+                   .Select(d => d.Id)
+                   .FirstOrDefault();
+
         public bool IsDealer(string userId)
-        {
-            return this.dbContext
-                .Dealers
-                .Any(d => d.UserId == userId);
-        }
+            => this.dbContext
+                    .Dealers
+                    .Any(d => d.UserId == userId);
     }
 }

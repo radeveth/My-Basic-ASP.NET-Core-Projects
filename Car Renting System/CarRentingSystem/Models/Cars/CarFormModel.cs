@@ -1,21 +1,19 @@
 ﻿namespace CarRentingSystem.Models.Cars
 {
 
-    using CarRentingSystem.Data;
-    using CarRentingSystem.Data.Models;
     using System.ComponentModel.DataAnnotations;
-    using CarRentingSystem.Models.ValidationAttributes;
 
     using static Data.DataConstants.CarConstants;
     using static Data.DataConstants.UrlConstants;
-    
+    using CarRentingSystem.Services.Cars;
+
 
     // IValidateableObject -> Custom validation logic
-    public class AddCarFormModel
+    public class CarFormModel
     {
-        public AddCarFormModel()
+        public CarFormModel()
         {
-            this.Categories = new List<CarCategoryViewModel>();
+            this.Categories = new List<CarCategoryServiceModel>();
         }
 
         [Required]
@@ -47,6 +45,6 @@
         [Display(Name = "Category")]
         public  int CategoryId { get; set; }
 
-        public IEnumerable<CarCategoryViewModel> Categories { get; set; }
+        public IEnumerable<CarCategoryServiceModel> Categories { get; set; }
     }
 }

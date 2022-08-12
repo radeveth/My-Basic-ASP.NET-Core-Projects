@@ -2,8 +2,8 @@
 {
     using System.Linq;
     using CarRentingSystem.Data;
-    using CarRentingSystem.Models.Cars;
     using System.Collections.Generic;
+    using CarRentingSystem.Models.Cars;
     using CarRentingSystem.Data.Models;
 
     public class CarService : ICarService
@@ -80,11 +80,63 @@
             };
         }
 
+        public IEnumerable<CarCategoryServiceModel> GetCarCategories()
+            => this.dbContext
+                   .Categories
+                   .Select(x => new CarCategoryServiceModel
+                   {
+                       Id = x.Id,
+                       Name = x.Name
+                   })
+                   .ToList();
+
         public IEnumerable<string> AllCarBrands()
             => this.dbContext
             .Cars.Select(c => c.Brand)
             .Distinct()
             .OrderBy(br => br)
             .ToList();
+
+        public CarDetailsServiceModel Details(int id)
+            => this.dbContext
+                .Cars
+                .Select(c => new CarDetailsServiceModel()
+                {
+                    Id = c.DealerId,
+                    Brand = c.Brand,
+                    Model = c.Model,
+                    Description = c.Description,
+                    ImageUrl = c.ImageUrl,
+                    Year = c.Year,
+                    Category = c.Category.Name,
+                    DealerId = c.DealerId,
+                    DealerName = c.Dealer.Name,
+                    UserId = c.Dealer.UserId
+                })
+            .FirstOrDefault(c => c.Id == id);
+
+        public bool? CategoryExists(int categoryId)
+            => dbContext
+                .Categories
+                .Any(x => x.Id == categoryId);
+
+        int AddCar(CarFormModel car, int dealerId)
+        {
+            var carModel = new Car()
+            {
+                Brand = car.Brand,
+                Model = car.Model,
+                Description = car.Description,
+                ImageUrl = car.ImageUrl,
+                Year = car.Year,
+                CategoryId = car.CategoryId,
+                DealerId = dealerId
+            };
+
+            this.dbContext.Cars.Add(carModel);
+            this.dbContext.SaveChanges();
+
+            return carModel.Id;
+        }
     }
 }

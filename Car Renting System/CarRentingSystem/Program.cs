@@ -14,8 +14,8 @@ builder.Services.AddDbContext<CarRentingDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services
-    .AddTransient<ICarService, CarService>()
     .AddTransient<IDealerService, DealerService>()
+    .AddTransient<ICarService, CarService>()
     .AddTransient<IStatisticsService, StatisticsService>();
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options =>

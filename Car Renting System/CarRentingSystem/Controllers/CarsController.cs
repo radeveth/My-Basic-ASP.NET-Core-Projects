@@ -10,18 +10,23 @@
     using CarRentingSystem.Infrastructure;
     using CarRentingSystem.Services.Cars;
     using Microsoft.AspNetCore.Identity;
+    using CarRentingSystem.Services.Dealers;
 
     public class CarsController : Controller
     {
         private readonly ICarService carService;
-        private readonly CarRentingDbContext dbContext;
+        private readonly DealerService dealerService;
         private readonly UserManager<IdentityUser> userManager;
+
         public CarsController
-            (CarRentingDbContext dbContext, ICarService carService, UserManager<IdentityUser> userManager)
+            (CarRentingDbContext dbContext, 
+            ICarService carService,
+            DealerService dealerService,
+            UserManager<IdentityUser> userManager)
         {
-            this.dbContext = dbContext;
             this.carService = carService;
             this.userManager = userManager;
+            this.dealerService = dealerService;
         }
 
         // Model Biding steps:
@@ -32,14 +37,15 @@
         [Authorize]
         public IActionResult Add()
         {
-            if (!this.UserIsDelaer())
+            // if (!this.dealerService.IsDealer(this.GetUserId()))
+            if (!this.dealerService.IsDealer(ClaimsPrincipalExtensions.GetId(this.User)))
             {
                 return RedirectToAction
                     (nameof(DealersController.Become), "Dealers");
             }
 
-            return this.View(new AddCarFormModel()
-            { Categories = GetCarCategories() });
+            return this.View(new CarFormModel()
+            { Categories = carService.GetCarCategories() });
         }
 
         // Validation steps:
@@ -53,30 +59,32 @@
         //   6. Redirect to other page
         [Authorize]
         [HttpPost]
-        public IActionResult Add(AddCarFormModel car)
+        public IActionResult Add(CarFormModel car)
         {
-            ValidateCarFormModelData(car, dbContext);
+            var categoryExists = this.carService.CategoryExists(car.CategoryId);
+            if (categoryExists == null)
+            {
+                this.ModelState
+                    .AddModelError(nameof(car.CategoryId),
+                    "Category does not exist!");
+            }
+            else if (categoryExists == false)
+            {
+                this.ModelState
+                    .AddModelError(nameof(car.CategoryId),
+                    "Invalid category value for this Id!!!");
+            }
 
             if (!ModelState.IsValid)
             {
-                car.Categories = GetCarCategories();
+                car.Categories = carService.GetCarCategories();
 
                 return this.View(car);
             }
 
-            var carModel = new Car()
-            {
-                Brand = car.Brand,
-                Model = car.Model,
-                Description = car.Description,
-                ImageUrl = car.ImageUrl,
-                Year = car.Year,
-                CategoryId = car.CategoryId,
-                DealerId = this.GetCurrentDealerId()
-            };
+            int dealerId = this.dealerService.GetIdByUser(this.GetUserId());
 
-            this.dbContext.Cars.Add(carModel);
-            this.dbContext.SaveChanges();
+            int createdCarId = this.carService.AddCar(car, dealerId);
 
             return RedirectToAction(nameof(All), "Cars");
         }
@@ -98,7 +106,6 @@
             return this.View(query);
         }
 
-
         public IActionResult Mine([FromQuery] AllCarsQueryModel query)
         {
             CarQueryServiceModel carQueryServiceModel = carService.All
@@ -117,59 +124,19 @@
             return this.View(query);
         }
 
+        [Authorize]
+        public IActionResult Edit(int id)
+        {
+            return this.View();
+        }
+
+
         // Helpful methods
-
-        private bool UserIsDelaer() 
-            => this.dbContext
-                .Dealers
-                .Any(d => d.UserId == ClaimsPrincipalExtensions.GetId(this.User));
-
-        private int GetCurrentDealerId()
-            => this.dbContext
-                   .Dealers
-                   .Where(d => d.UserId == 
-                            ClaimsPrincipalExtensions.GetId(this.User))
-                   .Select(d => d.Id)
-                   .FirstOrDefault();
-
-        private IEnumerable<CarCategoryViewModel> GetCarCategories()
-            => this.dbContext
-                   .Categories
-                   .Select(x => new CarCategoryViewModel
-                   {
-                       Id = x.Id,
-                       Name = x.Name
-                   })
-                   .ToList();
 
         private string GetUserId()
             => this.userManager.GetUserId(this.User);
 
-        private void ValidateCarFormModelData(AddCarFormModel car, CarRentingDbContext dbContext)
-        {
-            Category givenCarCategory = dbContext
-                .Categories
-                .FirstOrDefault(x => x.Id == car.CategoryId);
-
-            if (givenCarCategory == null)
-            {
-                this.ModelState
-                    .AddModelError(nameof(car.CategoryId),
-                    "Category does not exist!");
-            }
-            else if (dbContext
-                .Categories
-                .FirstOrDefault(x => x.Name == givenCarCategory.Name) == null)
-            {
-                this.ModelState
-                    .AddModelError(nameof(car.CategoryId),
-                    "Invalid category value for this Id!!!");
-            }
-        }
-
         private int SkipPagesLogic(AllCarsQueryModel query)
-        {
-            return (query.CurrentPage - 1) * AllCarsQueryModel.CarsPerPage;
-        }
+            => (query.CurrentPage - 1) * AllCarsQueryModel.CarsPerPage;
     }
 }
