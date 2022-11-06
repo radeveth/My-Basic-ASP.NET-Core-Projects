@@ -5,6 +5,7 @@
 
     using ForumSystem.Data.Common.Repositories;
     using ForumSystem.Data.Models;
+    using ForumSystem.Services.Data.SettingsService;
     using ForumSystem.Web.ViewModels.Settings;
 
     using Microsoft.AspNetCore.Mvc;

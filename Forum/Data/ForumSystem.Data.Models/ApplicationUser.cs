@@ -20,6 +20,7 @@ namespace ForumSystem.Data.Models
             this.Posts = new HashSet<Post>();
             this.Comments = new HashSet<Comment>();
             this.Categories = new HashSet<Category>();
+            this.Notifications = new HashSet<Notification>();
         }
 
         public string FullName { get; set; }
@@ -48,5 +49,7 @@ namespace ForumSystem.Data.Models
 
         // One User can have many categories and one category have one user
         public virtual ICollection<Category> Categories { get; set; }
+
+        public virtual ICollection<Notification> Notifications { get; set; }
     }
 }

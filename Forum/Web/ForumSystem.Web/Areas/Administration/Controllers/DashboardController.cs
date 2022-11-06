@@ -1,5 +1,6 @@
 ﻿namespace ForumSystem.Web.Areas.Administration.Controllers
 {
+    using ForumSystem.Services.Data.SettingsService;
     using ForumSystem.Web.ViewModels.Administration.Dashboard;
 
     using Microsoft.AspNetCore.Mvc;

@@ -8,6 +8,7 @@
     using ForumSystem.Data.Common.Repositories;
     using ForumSystem.Data.Models;
     using ForumSystem.Data.Repositories;
+    using ForumSystem.Services.Data.SettingsService;
 
     using Microsoft.EntityFrameworkCore;
 

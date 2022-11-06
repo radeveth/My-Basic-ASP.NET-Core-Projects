@@ -1,4 +1,4 @@
-﻿namespace ForumSystem.Services.Data.SettingsService.SettingsService
+﻿namespace ForumSystem.Services.Data.SettingsService
 {
     using System.Collections.Generic;
 
