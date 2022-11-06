@@ -19,5 +19,10 @@
         {
             public const int ContentMaxLength = 10000;
         }
+
+        public static class NotificationValidation
+        {
+            public const int NameMaxLength = 200;
+        }
     }
 }

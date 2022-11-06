@@ -16,7 +16,13 @@ namespace ForumSystem.Data.Models
             this.Roles = new HashSet<IdentityUserRole<string>>();
             this.Claims = new HashSet<IdentityUserClaim<string>>();
             this.Logins = new HashSet<IdentityUserLogin<string>>();
+
+            this.Posts = new HashSet<Post>();
+            this.Comments = new HashSet<Comment>();
+            this.Categories = new HashSet<Category>();
         }
+
+        public string FullName { get; set; }
 
         // Audit info
         public DateTime CreatedOn { get; set; }
@@ -33,5 +39,14 @@ namespace ForumSystem.Data.Models
         public virtual ICollection<IdentityUserClaim<string>> Claims { get; set; }
 
         public virtual ICollection<IdentityUserLogin<string>> Logins { get; set; }
+
+        // One User can have many posts and one post have one user
+        public virtual ICollection<Post> Posts { get; set; }
+
+        // One User can have many comments and one comment have one user
+        public virtual ICollection<Comment> Comments { get; set; }
+
+        // One User can have many categories and one category have one user
+        public virtual ICollection<Category> Categories { get; set; }
     }
 }

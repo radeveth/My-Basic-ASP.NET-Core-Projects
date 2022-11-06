@@ -8,7 +8,7 @@
     using ForumSystem.Data.Models;
     using ForumSystem.Data.Repositories;
     using ForumSystem.Data.Seeding;
-    using ForumSystem.Services.Data;
+    using ForumSystem.Services.Data.SettingsService;
     using ForumSystem.Services.Mapping;
     using ForumSystem.Services.Messaging;
     using ForumSystem.Web.ViewModels;

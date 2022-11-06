@@ -24,6 +24,18 @@
         {
         }
 
+        public DbSet<Category> Categories { get; set; }
+
+        public DbSet<Post> Posts { get; set; }
+
+        public DbSet<Comment> Comments { get; set; }
+
+        public DbSet<Notification> Notifications { get; set; }
+
+        public DbSet<VotePost> VotePosts { get; set; }
+
+        public DbSet<VoteComment> VoteComments { get; set; }
+
         public DbSet<Setting> Settings { get; set; }
 
         public override int SaveChanges() => this.SaveChanges(true);

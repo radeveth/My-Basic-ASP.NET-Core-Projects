@@ -11,7 +11,6 @@
     using ForumSystem.Data.Models;
     using ForumSystem.Data.Repositories;
     using ForumSystem.Data.Seeding;
-    using ForumSystem.Services.Data;
     using ForumSystem.Services.Messaging;
 
     using CommandLine;
@@ -20,6 +19,7 @@
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
+    using ForumSystem.Services.Data.SettingsService;
 
     public static class Program
     {

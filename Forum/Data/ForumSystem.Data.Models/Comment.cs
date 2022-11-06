@@ -13,7 +13,7 @@
     {
         public Comment()
         {
-            this.VoteComments = new HashSet<VoteComment>();\
+            this.VoteComments = new HashSet<VoteComment>();
         }
 
         [MaxLength(ContentMaxLength)]
@@ -24,6 +24,13 @@
         public int PostId { get; set; }
 
         public virtual Post Post { get; set; }
+
+        // This relation is one to many
+        // One comment have one user and one user can have many comments
+        [ForeignKey(nameof(ApplicationUser))]
+        public int UserId { get; set; }
+
+        public ApplicationUser User { get; set; }
 
         public virtual ICollection<VoteComment> VoteComments { get; set; }
 

@@ -30,6 +30,13 @@
 
         public virtual Category Category { get; set; }
 
+        // This relation is one to many
+        // One post have one user and one user can have many posts
+        [ForeignKey(nameof(ApplicationUser))]
+        public int UserId { get; set; }
+
+        public ApplicationUser User { get; set; }
+
         // One post can have many comments
         public virtual ICollection<Comment> Comments { get; set; }
 
