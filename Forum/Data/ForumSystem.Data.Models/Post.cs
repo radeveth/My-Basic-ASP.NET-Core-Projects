@@ -1,6 +1,5 @@
 ﻿namespace ForumSystem.Data.Models
 {
-    using System.Collections;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
@@ -17,14 +16,17 @@
             this.VotePosts = new HashSet<VotePost>();
         }
 
+        [Required]
         [MaxLength(TitleMaxLength)]
         public string Title { get; set; }
 
+        [Required]
         [MaxLength(ContentMaxLength)]
         public string Content { get; set; }
 
         // This is relation one to many
         // One post have one category
+        [Required]
         [ForeignKey(nameof(Category))]
         public int CategoryId { get; set; }
 
@@ -32,6 +34,7 @@
 
         // This relation is one to many
         // One post have one user and one user can have many posts
+        [Required]
         [ForeignKey(nameof(ApplicationUser))]
         public int UserId { get; set; }
 

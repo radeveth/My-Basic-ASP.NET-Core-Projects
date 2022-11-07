@@ -9,9 +9,11 @@
 
     public class Notification : BaseModel<int>
     {
+        [Required]
         [MaxLength(NameMaxLength)]
         public string Name { get; set; }
 
+        [Required]
         [ForeignKey(nameof(ApplicationUser))]
         public int ToUserId { get; set; }
 

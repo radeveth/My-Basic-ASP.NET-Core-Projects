@@ -20,7 +20,15 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Data\ForumSystem.Data.Models\ForumSystem.Data.Models.csproj" />
+    <ProjectReference Include="..\..\ForumSystem.Common\ForumSystem.Common.csproj" />
     <ProjectReference Include="..\..\Services\ForumSystem.Services.Mapping\ForumSystem.Services.Mapping.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Categories\" />
+    <Folder Include="Comments\" />
+    <Folder Include="Notifications\" />
+    <Folder Include="Posts\" />
   </ItemGroup>
 
 </Project>
