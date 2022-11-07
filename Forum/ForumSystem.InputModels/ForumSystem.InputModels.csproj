@@ -6,4 +6,14 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Notifications\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Data\ForumSystem.Data.Common\ForumSystem.Data.Common.csproj" />
+    <ProjectReference Include="..\Data\ForumSystem.Data.Models\ForumSystem.Data.Models.csproj" />
+    <ProjectReference Include="..\Services\ForumSystem.Services.Mapping\ForumSystem.Services.Mapping.csproj" />
+  </ItemGroup>
+
 </Project>
