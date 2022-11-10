@@ -2,6 +2,7 @@
 {
     using ForumSystem.Data.Models;
     using ForumSystem.Services.Mapping;
+    using ForumSystem.Web.ViewModels.ApplicationUsers;
 
     public class CategoryViewModel : IMapFrom<Category>
     {
@@ -14,5 +15,7 @@
         public string ImageUrl { get; set; }
 
         public int PostsCount { get; set; }
+
+        public UserViewModel Creator { get; set; }
     }
 }

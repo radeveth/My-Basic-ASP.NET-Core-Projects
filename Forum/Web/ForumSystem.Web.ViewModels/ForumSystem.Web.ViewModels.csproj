@@ -25,9 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Comments\" />
     <Folder Include="Notifications\" />
-    <Folder Include="Posts\" />
   </ItemGroup>
 
 </Project>
